@@ -1,0 +1,302 @@
+/* 1. 全局设置：解决展开/折叠内容时，因滚动条出现导致的页面抖动问题 */
+html {
+  scrollbar-gutter: stable;
+}
+
+/* 2. 默认样式 (主要用于电脑端)：包含背景视差滚动效果 */
+body {
+  font-family: "Inter", sans-serif;
+  color: #1a202c;
+  margin: 0;
+
+  /* --- 背景图相关 --- */
+  background-image: linear-gradient(
+      to bottom,
+      rgba(245, 247, 250, 0) 0%,
+      #f5f7fa 80%
+    ),
+    url("images/background.jpg");
+  background-color: #f5f7fa;
+  /* 后备颜色 */
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  /* 关键: 默认在电脑端使用 fixed 实现视差滚动 */
+  background-attachment: fixed;
+
+  /* 关键: cover 会让背景图铺满容器，在 fixed 模式下是铺满视口 */
+  background-size: cover;
+}
+
+/* 新建一个类，专门用于标题 */
+.font-title {
+  /* 标题使用 Josefin Sans 字体 */
+  font-family: "Josefin Sans", sans-serif;
+}
+
+/* 卡片样式（替代毛玻璃效果） */
+.glass-card {
+  /* 我们将背景换成一个轻微透明的白色，以确保在复杂背景图上依然有好的可读性 */
+  background: rgba(255, 255, 255, 0.9);
+  /* 圆角大小 */
+  border-radius: 1rem;
+  /* 边框样式 */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  /* 阴影效果 */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+}
+
+/* ================================================== */
+/* ↓↓↓ 用于“照片堆叠”效果的CSS样式 (已移至正确位置) ↓↓↓ */
+/* ================================================== */
+
+/* 照片堆叠效果的容器 */
+.photo-stack {
+  position: relative;
+  /* 关键：作为内部绝对定位元素的参照物 */
+  width: 100%;
+  max-width: 300px;
+  /* 您可以根据需要调整堆叠照片的最大宽度 */
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 1 / 1;
+  /* 让容器保持一个方形的比例，可以调整 */
+  cursor: pointer;
+  /* 整个区域都显示可点击的手型光标 */
+}
+
+/* 堆叠中的每一个项目（也就是包裹图片的<a>标签） */
+.stack-item {
+  position: absolute;
+  /* 关键：让所有图片都叠在同一个位置 */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 0.75rem;
+  /* 圆角 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  /* 阴影 */
+  overflow: hidden;
+  /* 隐藏图片溢出的部分 */
+  transition: transform 0.3s ease-in-out;
+  /* 为所有变换添加平滑过渡动画 */
+}
+
+.stack-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 确保图片填满容器且不变形 */
+}
+
+/* 为堆叠中的不同图片设置初始的旋转角度和层级 */
+.stack-item-1 {
+  transform: rotate(-8deg);
+  z-index: 10;
+}
+
+.stack-item-2 {
+  transform: rotate(4deg);
+  z-index: 20;
+}
+
+.stack-item-3 {
+  transform: rotate(-2deg);
+  z-index: 30;
+  /* z-index最高的在最上面 */
+}
+
+/* 当鼠标悬停在整个容器上时，让图片“散开” */
+.photo-stack:hover .stack-item-1 {
+  transform: rotate(-12deg) translateX(-25%) scale(1.05);
+}
+
+.photo-stack:hover .stack-item-2 {
+  transform: rotate(8deg) translateX(20%) scale(1.05);
+}
+
+.photo-stack:hover .stack-item-3 {
+  transform: rotate(2deg) translateY(-20%) scale(1.05);
+}
+
+.photography-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  /* 根据需要调整最小宽度 */
+  gap: 8px;
+  /* 调整图片之间的间距 */
+}
+
+.photography-grid a {
+  display: block;
+  /* 使链接占据整个 grid cell */
+}
+
+.photography-grid img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  /* 如果需要 */
+  object-fit: cover;
+  /* 保持图片比例 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* 如果需要 */
+  transition: transform 0.3s ease-in-out;
+  /* 如果需要 */
+}
+
+.photography-grid img:hover {
+  transform: scale(1.05);
+  /* 如果需要 */
+}
+
+/* --- 全局与字体设置 --- */
+html {
+  scroll-behavior: smooth;
+  /* 平滑滚动效果 */
+}
+
+body {
+  font-family: "Noto Sans SC", sans-serif;
+  /* 全局中文字体 */
+  background-color: #f8f9fa;
+  /* 设置一个淡雅的背景色 */
+}
+
+.font-title {
+  /* 标题优先使用 Josefin Sans, 中文回退到 Noto Sans SC 的粗体 */
+  font-family: "Josefin Sans", "Noto Sans SC", sans-serif;
+  font-weight: 700;
+}
+
+/* --- 卡片样式 --- */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  /* 半透明背景，营造质感 */
+  border-radius: 1rem;
+  /* 圆角 */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08);
+  /* 精致的阴影 */
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  /* 细微的边框 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  /* 平滑的过渡动画 */
+}
+
+.glass-card:hover {
+  transform: translateY(-5px);
+  /* 鼠标悬浮时轻微上移 */
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12);
+  /* 悬浮时阴影加深 */
+}
+
+/* --- 展开/折叠内容的容器 --- */
+.accordion-content {
+  padding-top: 1rem;
+  /* 等同于之前展开后的 pt-4 */
+  padding-bottom: 1rem;
+  /* 增加底部间距 */
+}
+
+/* --- 照片堆叠效果 --- */
+.photo-stack {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 4 / 3;
+  /* 固定宽高比 */
+  cursor: pointer;
+}
+
+.stack-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 0.75rem;
+  /* 圆角 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.stack-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  /* 保证图片填充容器且不变形 */
+}
+
+/* 堆叠中各图片的初始旋转和层级 */
+.stack-item:nth-child(1) {
+  transform: rotate(-8deg);
+  z-index: 10;
+}
+
+.stack-item:nth-child(2) {
+  transform: rotate(4deg);
+  z-index: 20;
+}
+
+.stack-item:nth-child(3) {
+  transform: rotate(-2deg);
+  z-index: 30;
+}
+
+/* 鼠标悬浮时，图片散开的效果 */
+.photo-stack:hover .stack-item:nth-child(1) {
+  transform: rotate(-12deg) translateX(-25%) scale(1.05);
+}
+
+.photo-stack:hover .stack-item:nth-child(2) {
+  transform: rotate(8deg) translateX(25%) scale(1.05);
+}
+
+.photo-stack:hover .stack-item:nth-child(3) {
+  transform: rotate(2deg) translateY(-20%) scale(1.05);
+}
+
+/* --- 瀑布流布局样式 --- */
+.masonry-gallery {
+  /* 核心：定义列数和列间距 */
+  column-count: 4;
+  /* 在大屏幕上显示4列 */
+  column-gap: 1rem;
+  /* 16px 的列间距 */
+}
+
+.masonry-gallery a {
+  /* 防止图片在跨列时被切断 */
+  break-inside: avoid;
+  display: block;
+  /* 使链接成为块级元素 */
+  margin-bottom: 1rem;
+  /* 图片下方的间距 */
+  border-radius: 0.5rem;
+  /* 轻微的圆角 */
+  overflow: hidden;
+  /* 隐藏溢出的部分，配合圆角 */
+}
+
+/* 响应式设计：在不同屏幕尺寸下调整列数 */
+@media (max-width: 1024px) {
+  .masonry-gallery {
+    column-count: 3;
+    /* 中等屏幕(如平板)显示3列 */
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-gallery {
+    column-count: 2;
+    /* 小型屏幕(如手机)显示2列 */
+  }
+}
