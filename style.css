@@ -1,0 +1,141 @@
+/* 1. 全局设置 */
+html {
+  scrollbar-gutter: stable; /* 解决滚动条出现导致的页面抖动 */
+  scroll-behavior: smooth; /* 平滑滚动效果 */
+}
+
+/* 2. 基础样式 */
+body {
+  font-family: "Inter", "Noto Sans SC", sans-serif; /* 优先使用 Inter, 中文回退到 Noto Sans SC */
+  color: #1a202c;
+  margin: 0;
+
+  /* --- 背景图相关 --- */
+  background-image: linear-gradient(
+      to bottom,
+      rgba(245, 247, 250, 0) 0%,
+      #f5f7fa 80%
+    ),
+    url("images/background.jpg");
+  background-color: #f5f7fa; /* 后备颜色 */
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-attachment: fixed; /* 实现背景视差滚动 */
+  background-size: cover;
+}
+
+/* 3. 组件样式 */
+
+/* 标题字体 */
+.font-title {
+  /* 标题优先使用 Josefin Sans, 中文回退到 Noto Sans SC 的粗体 */
+  font-family: "Josefin Sans", "Noto Sans SC", sans-serif;
+  font-weight: 700;
+}
+
+/* 卡片样式 (统一版本) */
+.glass-card {
+  background: rgba(255, 255, 255, 0.95); /* 半透明背景，营造质感 */
+  border-radius: 1rem; /* 圆角 */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.08); /* 精致的阴影 */
+  border: 1px solid rgba(0, 0, 0, 0.05); /* 细微的边框 */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* 平滑的过渡动画 */
+}
+
+.glass-card:hover {
+  transform: translateY(-5px); /* 鼠标悬浮时轻微上移 */
+  box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.12); /* 悬浮时阴影加深 */
+}
+
+/* 作品集手风琴内容区域 */
+.accordion-content {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+/* 照片堆叠效果 */
+.photo-stack {
+  position: relative;
+  width: 100%;
+  max-width: 350px;
+  margin-left: auto;
+  margin-right: auto;
+  aspect-ratio: 4 / 3; /* 固定宽高比 */
+  cursor: pointer;
+}
+
+.stack-item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 0.75rem; /* 圆角 */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.3s ease-in-out;
+}
+
+.stack-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* 保证图片填充容器且不变形 */
+}
+
+/* 堆叠中各图片的初始旋转和层级 (使用 :nth-child) */
+.stack-item:nth-child(1) {
+  transform: rotate(-8deg);
+  z-index: 10;
+}
+
+.stack-item:nth-child(2) {
+  transform: rotate(4deg);
+  z-index: 20;
+}
+
+.stack-item:nth-child(3) {
+  transform: rotate(-2deg);
+  z-index: 30;
+}
+
+/* 鼠标悬浮时，图片散开的效果 */
+.photo-stack:hover .stack-item:nth-child(1) {
+  transform: rotate(-12deg) translateX(-25%) scale(1.05);
+}
+
+.photo-stack:hover .stack-item:nth-child(2) {
+  transform: rotate(8deg) translateX(25%) scale(1.05);
+}
+
+.photo-stack:hover .stack-item:nth-child(3) {
+  transform: rotate(2deg) translateY(-20%) scale(1.05);
+}
+
+/* 摄影作品瀑布流布局 */
+.masonry-gallery {
+  column-count: 4; /* 大屏幕上显示4列 */
+  column-gap: 1rem; /* 列间距 */
+}
+
+.masonry-gallery a {
+  break-inside: avoid; /* 防止图片在跨列时被切断 */
+  display: block;
+  margin-bottom: 1rem; /* 图片下方的间距 */
+  border-radius: 0.5rem; /* 圆角 */
+  overflow: hidden; /* 隐藏溢出的部分，配合圆角 */
+}
+
+/* 4. 响应式设计 */
+@media (max-width: 1024px) {
+  .masonry-gallery {
+    column-count: 3; /* 中等屏幕(如平板)显示3列 */
+  }
+}
+
+@media (max-width: 768px) {
+  .masonry-gallery {
+    column-count: 2; /* 小型屏幕(如手机)显示2列 */
+  }
+}
