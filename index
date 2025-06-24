@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+    <script type="text/javascript">
+        // 获取浏览器语言
+        const userLang = navigator.language || navigator.userLanguage; 
+
+        // 默认跳转到英文
+        let targetUrl = './en/';
+
+        if (userLang.startsWith('zh-CN')) {
+            targetUrl = './zh-cn/';
+        } else if (userLang.startsWith('zh-HK') || userLang.startsWith('zh-TW')) {
+            targetUrl = './zh-hk/';
+        }
+        
+        // 执行跳转
+        window.location.replace(targetUrl);
+    </script>
+    <style>
+        body { text-align: center; padding-top: 50px; font-family: sans-serif; }
+        p { margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+    <p>Redirecting you to the appropriate language version...</p>
+    <p>If you are not redirected automatically, please choose your language:</p>
+    <a href="./en/">English</a> |
+    <a href="./zh-cn/">简体中文</a> |
+    <a href="./zh-hk/">繁體中文</a>
+</body>
+</html>
